@@ -57,7 +57,60 @@ class PokemonsControllerTest < ActionDispatch::IntegrationTest
   end
 end
 ```
+tus archivos de pruebas deben empezar con el **require test_helper** en este archivo puedes indicar calses o metodos que quiras que esten disponible en toda tu suite o ambiente de pruebas, todos los archivos de pruebas deben llevar test en el nombre.
 
 ## Mocks y VCR
+Los Mock objects y la herramienta VCR se utilizan para evitar hacer llamados excesivos a apis en las pruebas, representando o guardando una respuesta de algún api para poder reutilizarla cuantas veces sea necesario. 
+
+los mocks vienen a ser cascarones vacios que simulan ser una respuesta o objeto retornados por el api y que podemos usar cada vez que se corran las pruebas sin necesidad de estar consultando al api real en cada iteracion, para usar este metodo de simulacion de request se necesita la biblioteca mocha que se debe agregar en el gemfile en la parte de ambiente test y luego de instalar se debe incluir en el archivo test_helper para poder ser usado en la suite o ambiente de pruebas:
+
+``` [ruby]
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "webdrivers"
+  gen "mocha"
+end
+
+### Test Helper ###
+ENV["RAILS_ENV"] ||= "test"
+require_relative "../config/environment"
+require "rails/test_help"
+require "mocha/minitest"
+
+class ActiveSupport::TestCase
+  # Run tests in parallel with specified workers
+  parallelize(workers: :number_of_processors)
+
+  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
+  fixtures :all
+
+  # Add more helper methods to be used by all tests here...
+end
+### Test Helper ###
+
+```
+
+al incluir mocha minitest en el rails helper se habilitan varios métodos que podemos utilizar para simular los comportamientos de request al api y nos permite hacer un mock object de la respuesta de la api, los inconvenientes de este método es que corremos el riesgo de crear una prueba que nunca falle debido al objeto que estamos creando:
+
+``` [ruby]
+  test "search for a new pokemon" do
+    params = {
+      name: 'pikachu'
+    }
+
+    assert_difference "Pokemon.count" do
+      PokemonLocatorService.any_instance.expects(:call).returns(Pokemon.create(name: 'pikachu', number: '25'))
+      post search_path, params: params
+    end
+
+    assert_equal "pikachu´s number is 25", flash[:notice]
+    assert_redirected_to root_path
+  end
+```
+
+
 
 ## System tests
