@@ -111,6 +111,15 @@ al incluir mocha minitest en el rails helper se habilitan varios métodos que po
   end
 ```
 
-
-
 ## System tests
+Los system test son pruebas que se realizan emulando el comportamiento del usuario en el navegador, la herramienta por defecto en rails
+para realizar system test es kapibara y las pruebas heredan de ApplicationSystemTestCase, por defecto rails al correr las pruebas ignora este tipo
+de pruebas pero puden correrse con:
+
+`rails test:system`
+
+### coverage
+El coverage de las pruebas indica cuanto de tu codigo esta siendo realmente probado, existe una gema que te permite tener conocimiento de este porcentaje
+
+[https://github.com/simplecov-ruby/simplecov](URL "Simple cov")
+
