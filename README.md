@@ -121,5 +121,5 @@ de pruebas pero puden correrse con:
 ### coverage
 El coverage de las pruebas indica cuanto de tu codigo esta siendo realmente probado, existe una gema que te permite tener conocimiento de este porcentaje
 
-[https://github.com/simplecov-ruby/simplecov](URL "Simple cov")
+[simple cov](https://github.com/simplecov-ruby/simplecov "Simple cov")
 
